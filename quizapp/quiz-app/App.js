@@ -32,32 +32,41 @@ const questions = [
   },
 ];
 
-const [currentQuestion, setCurrentQuestion] = useState();
+const [currentQuestion, setCurrentQuestion] = useState(0);
+
+const [showScore, setShowScore] = useState(false);
+
+const [score, setScore] = useState(0);
 
 const handleAnswerButtonClick = () => {
+    if (isCorrect===true){
+      alert("this answer is correct!");
+    }
+
+
 const nextQuestion = currentQuestion + 1;
 if(nextQuestion < questions.length) {
 setCurrentQuestion(nextQuestion);
 } else {
-  alert("You have completed the test!")
+  setShowScore(true);
 }
 }
 
 return (
  <div className='app'>
- { false ? (
-   <div className='score'> You scored 1 out of {questions.length}</div>
+ {showScore ? (
+   <div className='score'> You {score} 1 out of {questions.length}</div>
  ) : (
   <>
      <div className='questions'>
      <div className='questions-count'>
-        <span>Question 1</span>/{questions.length}
+        <span>Question {currentQuestion + 1}</span>/{questions.length}
      </div>
      <div className='question-text'>{questions[currentQuestion].questionText}</div>
      </div>
      <div className='answer-section'>
       {questions[currentQuestion].answerOption.map((answerOption) => (
-          <button onClick={handleAnswerButtonClick}>{answerOption.answerText}</button>
+          <button onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}>{answerOption.answerText}</button>
       ))}
      </div>
   </>
