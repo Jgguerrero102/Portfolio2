@@ -1,36 +1,93 @@
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useState } from 'react';
 import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
-import { Card, CheckBox } from 'react-native-elements';
+import MainMenu from "./Components/MainMenu";
+import Quiz from "./Components/Quiz";
+import MainMenu from "./Components/EndScreen";
+
+function App() {
+const[gameState, setGameState] = useState("menu");
+return (
+  <div className="App">
+    <h1>Quiz App</h1>
+    {gameState === "menu" && <MainMenu />}
+    {gameState === "quiz" && <Quiz />}
+    {gameState === "endScreen" && <EndScreen />}
+  </div>
+)
+}
+
+export default function App() {
+const questions = [
+  {
+    questionText: "How many moons does the Earth have?",
+    multipleAnswers: true,
+    answerOptions: [
+      { correct: true, answerText: "1" },
+      { correct: false, answerText: "2" },
+      { correct: false, answerText: " 3" },
+      { correct: false, answerText: "4" }
+    ]
+  },
+  {
+    questionText: "True or False: Gravity has less of an effect in space",
+    multipleAnswers: true,
+    answerOptions: [
+      { correct: false, answerText: "False" },
+      { correct: true, answerText: "True" },
+    ]
+  },
+  {
+    questionText: "Mass x Gravity = ",
+    multipleAnswers: true,
+    answersOptions: [
+      { correct: true, answerText: "Weight" },
+    ]
+  },
+];
+
+const [currentQuestion, setCurrentQuestion] = useState(0);
+
+const [showScore, setShowScore] = useState(false);
+
+const [score, setScore] = useState(0);
+
+const handleAnswerButtonClick = () => {
+    if (isCorrect===true){
+      alert("this answer is correct!");
+    }
 
 
-let questions = [
-  {
-    title: "How many moons does the Earth have?",
-    multipleAnswers: true,
-    answers: [
-      { correct: true, title: "1" },
-      { correct: false, title: "2" },
-      { correct: false, title: " 3" },
-      { correct: false, title: "4" }
-    ]
-  },
-  {
-    title: "True or False: Gravity has less of an effect in space",
-    multipleAnswers: true,
-    answers: [
-      { correct: false, title: "False" },
-      { correct: true, title: "True" },
-    ]
-  },
-  {
-  title: "Mass x Gravity = ",
-    multipleAnswers: true,
-    answers: [
-      { correct: true, title: "Weight" },
-    ]
-  },
-]
+const nextQuestion = currentQuestion + 1;
+if(nextQuestion < questions.length) {
+setCurrentQuestion(nextQuestion);
+} else {
+  setShowScore(true);
+}
+}
+
+return (
+ <div className='app'>
+ {showScore ? (
+   <div className='score'> You {score} 1 out of {questions.length}</div>
+ ) : (
+  <>
+     <div className='questions'>
+     <div className='questions-count'>
+        <span>Question {currentQuestion + 1}</span>/{questions.length}
+     </div>
+     <div className='question-text'>{questions[currentQuestion].questionText}</div>
+     </div>
+     <div className='answer-section'>
+      {questions[currentQuestion].answerOption.map((answerOption) => (
+          <button onClick={() => handleAnswerButtonClick(answerOption.isCorrect)}>{answerOption.answerText}</button>
+      ))}
+     </div>
+  </>
+ )}
+ </div>
+);
+}
 
 export default function App() {
   let { score, setScore } = useState()
@@ -58,9 +115,10 @@ export default function App() {
       setScore(prevScore => prevScore === undefined ? 0 : prevScore)
     }
   }, [answers, score])
+
   return <>
     <View style={styles.container}>
-      <Text>Quiz Application</Text>
+      <Text>Quiz App</Text>
       <FlatList data={questions} renderItem={({item, index}) => 
         <Question showAnswers={score !== undefined} data={item} key={index}
           setAnswers={
