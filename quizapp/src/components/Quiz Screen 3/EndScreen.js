@@ -3,6 +3,11 @@ import React, {useState} from "react";
 
 function EndScreen() {
     const { score } = useState(Quiz);
+    const restartQuiz = () => {
+        setScore(0);
+        setGameState("menu");
+    };
+
     return (
         <div className="EndScreen">
             {" "}
