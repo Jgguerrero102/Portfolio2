@@ -6,7 +6,9 @@ import Quiz from "./Components/Quiz";
 import MainMenu from "./Components/EndScreen";
 
 function App() {
-const[gameState, setGameState] = useState("menu");
+const [gameState, setGameState] = useState("menu");
+const [score, setScore] = useState(0);
+
 return (
   <div className="App">
     <h1>Quiz App</h1>
